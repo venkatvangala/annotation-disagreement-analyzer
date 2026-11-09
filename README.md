@@ -35,6 +35,9 @@ and kept every rater's labels for each: 10,931 annotations from 80 raters.
   differently, not that they label too much. I have not tested this yet.
 - Raters with many annotations tend to sit at higher agreement. This could
   reflect experience or just less noise in larger samples.
+- Complete disagreement is rare: only 6.1% of comments (181 of 2,963) had zero
+  label overlap, yet average pairwise agreement is just 0.28. Raters usually
+  share some label, but seldom the same set.
 
 ![Rater behavior vs agreement](images/rater_scatter.png)
 ![Distribution of rater agreement](images/agreement_hist.png)
@@ -46,6 +49,8 @@ and kept every rater's labels for each: 10,931 annotations from 80 raters.
 - Raters with fewer than about 30 annotations give noisy scores.
 - My first disagreement ranking (counting emotions that raters split on)
   was inflated by heavy labelers, which is why I added the per-rater view.
+- The 25 reviewed comments are not a random sample of the 181 zero-agreement
+  comments, so the reason counts describe those 25 only.
 
 ## How to run
 ```
@@ -58,6 +63,41 @@ python src/make_charts.py
 ```
 
 ## Next steps
-- Look at why raters split on the most disputed comments (sarcasm, missing
-  context, overlapping categories).
-- Try a measure that is not biased by label count.
+- Tag a random sample of the 181 zero-agreement comments to check whether the
+  reasons hold up.
+- Try an agreement measure that is not biased by label count.
+
+## Why do raters disagree? (qualitative review)
+Of 2,963 comments with 3 or more raters, **181 (6.1%) had zero label overlap**
+between all raters. I took 25 of these (the first ones in the export, not a
+random sample) and tagged the main reason for each. Tags were drafted with AI
+assistance and reviewed by me.
+
+| Reason | Count | Share |
+|---|---|---|
+| Needs context (refers to something not in the text) | 7 | 28% |
+| Mixed emotions | 6 | 24% |
+| Sarcasm / irony | 5 | 20% |
+| Similar categories (e.g. anger vs. annoyance) | 3 | 12% |
+| Vague / no clear emotion | 3 | 12% |
+| Other (opinion statement) | 1 | 4% |
+
+**Takeaway:** only 3 of 25 cases came from raters confusing neighboring labels.
+Most zero-agreement comments came from missing context, several feelings in one
+comment, or irony. These are problems with the text or the task, so fixing them
+means changing the guidelines (for example, showing the parent comment), not
+retraining raters.
+
+Examples:
+- *"Wow this basically means that 99% of bollywood movies are basically
+  documentaries! This changes everything!"* Five raters chose five different
+  labels (joy, neutral, realization, excitement, admiration). The irony is easy to miss.
+- *"It's even creepier when it's happening TO you. Source: I carried two VERY
+  active babies."* Labels ranged from sadness to fear to neutral. Without the
+  parent comment, the topic and tone are unclear.
+- *"This. Nurses already have one of the hardest jobs on the planet. They
+  shouldn't have to waste time on this."* It mixes agreement with frustration, so
+  raters chose approval, disapproval, neutral, or sadness.
+
+**Limits of this review:** one reviewer, 25 comments, all taken from the
+zero-agreement group (not a random sample), and the tags are subjective.
