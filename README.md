@@ -35,6 +35,9 @@ and kept every rater's labels for each: 10,931 annotations from 80 raters.
   differently, not that they label too much. I have not tested this yet.
 - Raters with many annotations tend to sit at higher agreement. This could
   reflect experience or just less noise in larger samples.
+- Complete disagreement is rare: only 6.1% of comments (181 of 2,963) had zero
+  label overlap, yet average pairwise agreement is just 0.28. Raters usually
+  share some label, but seldom the same set.
 
 
 ![Rater behavior vs agreement](images/rater_scatter.png)
